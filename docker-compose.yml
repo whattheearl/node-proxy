@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  node-proxy:
+    build: './'
+    restart: unless-stopped
+    volumes:
+      - ./:/node-proxy/
+    ports:
+      - 80:8080
+
+  jearl.io:
+    image: nginx
+    restart: unless-stopped
+
+  mochibean.com:
+    image: wordpress:5.8.2-apache
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    # volumes:
+    #   - ./wordpress/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    #   - ./wordpress/uploads:/var/www/html/wp-content
+
+  db:
+    image: mariadb:10
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    env_file:
+      - ./.env
+    # volumes:
+    #   - ./db:/var/lib/mysql
